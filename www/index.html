@@ -5,14 +5,84 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <script href="js/lib/jquery1.11.js"></script>
+        <script src="js/lib/jquery1.11.js"></script>
         <link rel="stylesheet" type="text/css" href="css/lib/jquery.mobile-1.4.2.min.css" />
-        <script href="js/lib/jquery.mobile-1.4.2.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/index.css"/>
+        <script src="js/lib/jquery.mobile-1.4.2.min.js"></script>
         
         <title>SuperAddeRestDroid</title>
+
     </head>
     <body>
-        
-        
+        <div data-role="page">
+
+          <div class="outlying" data-role="header" data-theme="b">
+            <h1>REST Resume Client</h1>
+          </div>
+
+          <div data-role="main" class="ui-content">
+            <div data-role="tabs" id="tabs">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#resumes" data-ajax="false">Resumes</a></li>
+                        <li><a href="#add-resume" data-ajax="false">Add a resume</a></li>
+                    </ul>
+                </div>
+                <div id="resumes" class="ui-body ui-content">
+                    <h1>Resumes tab</h1>
+                    <p>We'll add here resumes which the xml at server will give us.</p>
+                </div>
+                <div id="add-resume">
+                    <h3 class="ui-bar ui-bar-b ui-corner-all">Resume</h3>
+                    <form>
+                        <div class="ui-field-contain">
+                            <label for="textinput-name">Name:</label>
+                            <input name="textinput-name" id="textinput-name" placeholder="Name..." type="text">
+                        </div>
+                        <div class="ui-field-contain">
+                            <label for="textinput-surname">Surname:</label>
+                            <input name="textinput-surname" id="textinput-surname" placeholder="Surname..." type="text">
+                        </div>
+                        <div class="ui-field-contain">
+                            <label for="textinput-goal">Goal:</label>
+                            <input name="textinput-goal" id="textinput-goal" placeholder="Goal..." type="text">
+                        </div>
+                        <div class="ui-field-contain">
+                            <label for="textinput-cursus">Cursus:</label>
+                            <input name="textinput-cursus" id="textinput-cursus" placeholder="Cursus..." type="text">
+                        </div>
+                        <div class="ui-field-contain">
+                            <label for="textinput-languages">Languages:</label>
+                            <input name="textinput-languages" id="textinput-languages" placeholder="Language..." type="text">
+                        </div>
+                        <div class="ui-field-contain">
+                            <label for="textinput-languages">Skills:</label>
+                            <input name="textinput-skills" id="textinput-skills" placeholder="Skills..." type="text">
+                        </div>
+                        <div class="ui-field-contain">
+                            <label for="textinput-languages">IT skills:</label>
+                            <input name="textinput-itskills" id="textinput-itskills" placeholder="IT Skills..." type="text">
+                        </div>          
+                    </form>
+                    <div data-role="controlgroup" data-type="horizontal">
+                        <button class="ui-shadow ui-btn ui-btn-a ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back"  
+                            data-theme="a">
+                            Reset
+                        </button>
+                        <button id="add-button"
+                            class="ui-shadow ui-btn ui-btn-b ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="outlying" data-role="footer" data-theme="b">
+            <h1>Created by juanwolf</h1>
+          </div>
+
+        </div>
+       
     </body>
 </html>

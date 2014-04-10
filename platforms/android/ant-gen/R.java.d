@@ -6,4 +6,9 @@
 /home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/res/drawable-hdpi/icon.png \
 /home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/res/drawable-xhdpi/icon.png \
 /home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/res/drawable/icon.png \
+/home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/ant-build/res/drawable-mdpi/icon.png \
+/home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/ant-build/res/drawable-ldpi/icon.png \
+/home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/ant-build/res/drawable-hdpi/icon.png \
+/home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/ant-build/res/drawable-xhdpi/icon.png \
+/home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/ant-build/res/drawable/icon.png \
 /home/juanwolf/Documents/Devel/XMLProjet/SuperAddeRestDroid/platforms/android/ant-build/AndroidManifest.xml \
