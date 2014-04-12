@@ -15,73 +15,84 @@
     </head>
     <body>
         <div data-role="page">
+            <a id="errorPopupLink" href="#errorPopup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="popup" data-position-to="window"></a>
+            <div data-role="popup" id="errorPopup" data-overlay-theme="a" class="ui-content" data-theme="a">
+                <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">
+                    Close
+                </a>
+                <p>An error occured !</p>
+            </div>
+            <div class="outlying" data-role="header" data-theme="b">
+                <h1>Resume Manager</h1>
+                <a id="refresh-button" href="#" class="ui-shadow-icon ui-btn ui-shadow ui-corner-all ui-btn-b ui-icon-refresh ui-btn-icon-left ui-btn-icon-notext"></a>
+            </div>
 
-          <div class="outlying" data-role="header" data-theme="b">
-            <h1>Resume Manager</h1>
-          </div>
-
-          <div data-role="main" class="ui-content">
-            <div data-role="tabs" id="tabs">
-                <div data-role="navbar">
-                    <ul>
-                        <li><a class="ui-btn-active" href="#resumes" data-ajax="true">Resumes</a></li>
-                        <li><a href="#add-resume" data-ajax="false">Add a resume</a></li>
-                    </ul>
-                </div>
-                <div id="resumes" class="ui-body ui-content">
-                    <p>No resume available =(</p>
-                </div>
-                <div id="add-resume">
-                    <h3 class="ui-bar ui-bar-b ui-corner-all">Resume</h3>
-                    <form>
-                        <div class="ui-field-contain">
-                            <label for="textinput-name">Name:</label>
-                            <input name="textinput-name" id="textinput-name" placeholder="Name..." type="text">
+            <div data-role="main" class="ui-content">
+                <div data-role="tabs" id="tabs">
+                    <div data-role="navbar">
+                        <ul>
+                            <li><a class="ui-btn-active" href="#resumes" data-ajax="true">Resumes</a></li>
+                            <li><a href="#add-resume" data-ajax="false">Add a resume</a></li>
+                        </ul>
+                    </div>
+                    <div id="resumes" class="ui-body ui-content">
+                        <p>No resume available =(</p>
+                    </div>
+                    <div id="add-resume">
+                        <h3 class="ui-bar ui-bar-b ui-corner-all">Resume</h3>
+                        <form>
+                            <div class="ui-field-contain">
+                                <label for="textinput-name">Name:</label>
+                                <input name="textinput-name" id="textinput-name" placeholder="Name..." type="text">
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="textinput-surname">Surname:</label>
+                                <input name="textinput-surname" id="textinput-surname" placeholder="Surname..." type="text">
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="textinput-goal">Goal:</label>
+                                <input name="textinput-goal" id="textinput-goal" placeholder="Goal..." type="text">
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="textinput-attended">Attended:</label>
+                                <input name="textinput-attended" id="textinput-attended" placeholder="Attended..." type="text">
+                                <a href="#" class="ui-btn ui-icon-plus ui-btn-icon-left">Add an institution</a>
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="textinput-languages">Languages:</label>
+                                <input name="textinput-languages" id="textinput-languages" placeholder="Language..." type="text">
+                                <a href="#" class="ui-btn ui-icon-plus ui-btn-icon-left">Add a language</a>
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="textinput-skills">Skills:</label>
+                                <input name="textinput-skills" id="textinput-skills" placeholder="Skill..." type="text">
+                                <a href="#" class="ui-btn ui-icon-plus ui-btn-icon-left">Add a skill</a>
+                            </div>
+                            <div class="ui-field-contain">
+                                <label for="textinput-itskills">IT skills:</label>
+                                <input name="textinput-itskills" id="textinput-itskills" placeholder="IT Skill..." type="text">
+                                <a href="#" class="ui-btn ui-icon-plus ui-btn-icon-left">Add an IT skill</a>
+                            </div>          
+                        </form>
+                        <div data-role="controlgroup" data-type="horizontal">
+                            <button class="ui-shadow ui-btn ui-btn-a ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back"  
+                                    data-theme="a">
+                                Reset
+                            </button>
+                            <button id="add-button"
+                                    class="ui-shadow ui-btn ui-btn-b ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">
+                                Add
+                            </button>
                         </div>
-                        <div class="ui-field-contain">
-                            <label for="textinput-surname">Surname:</label>
-                            <input name="textinput-surname" id="textinput-surname" placeholder="Surname..." type="text">
-                        </div>
-                        <div class="ui-field-contain">
-                            <label for="textinput-goal">Goal:</label>
-                            <input name="textinput-goal" id="textinput-goal" placeholder="Goal..." type="text">
-                        </div>
-                        <div class="ui-field-contain">
-                            <label for="textinput-attented">Attented:</label>
-                            <input name="textinput-attented" id="textinput-attented" placeholder="Attented..." type="text">
-                        </div>
-                        <div class="ui-field-contain">
-                            <label for="textinput-languages">Languages:</label>
-                            <input name="textinput-languages" id="textinput-languages" placeholder="Languages..." type="text">
-                        </div>
-                        <div class="ui-field-contain">
-                            <label for="textinput-skills">Skills:</label>
-                            <input name="textinput-skills" id="textinput-skills" placeholder="Skills..." type="text">
-                        </div>
-                        <div class="ui-field-contain">
-                            <label for="textinput-itskills">IT skills:</label>
-                            <input name="textinput-itskills" id="textinput-itskills" placeholder="IT Skills..." type="text">
-                        </div>          
-                    </form>
-                    <div data-role="controlgroup" data-type="horizontal">
-                        <button class="ui-shadow ui-btn ui-btn-a ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-back"  
-                            data-theme="a">
-                            Reset
-                        </button>
-                        <button id="add-button"
-                            class="ui-shadow ui-btn ui-btn-b ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">
-                            Add
-                        </button>
                     </div>
                 </div>
             </div>
-          </div>
 
-          <div class="outlying" data-role="footer" data-theme="b">
-            <h1>Created by juanwolf</h1>
-          </div>
+            <div class="outlying" data-role="footer" data-theme="b">
+                <h1>Created by juanwolf</h1>
+            </div>
 
         </div>
-       
+
     </body>
 </html>
