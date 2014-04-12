@@ -1,0 +1,17 @@
+#add-button {
+    background-color: #27ae60;
+    border-color: #ddd;
+}
+.outlying {
+    border-color: #ddd;
+    background-color: #34495e;
+}
+#tabs .ui-btn-active {
+    background-color: #34495e;
+}
+
+#add-resume h3 {
+    background-color: #2980b9;
+    border: #ddd;
+    
+}

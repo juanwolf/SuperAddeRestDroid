@@ -4,12 +4,12 @@
     <head>
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=medium-dpi" />
         <script src="js/lib/jquery1.11.js"></script>
         <link rel="stylesheet" type="text/css" href="css/lib/jquery.mobile-1.4.2.min.css" />
         <link rel="stylesheet" type="text/css" href="css/index.css"/>
         <script src="js/lib/jquery.mobile-1.4.2.min.js"></script>
-        
+        <script src="js/index.js"></script>
         <title>SuperAddeRestDroid</title>
 
     </head>
@@ -17,20 +17,19 @@
         <div data-role="page">
 
           <div class="outlying" data-role="header" data-theme="b">
-            <h1>REST Resume Client</h1>
+            <h1>Resume Manager</h1>
           </div>
 
           <div data-role="main" class="ui-content">
             <div data-role="tabs" id="tabs">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#resumes" data-ajax="false">Resumes</a></li>
+                        <li><a class="ui-btn-active" href="#resumes" data-ajax="true">Resumes</a></li>
                         <li><a href="#add-resume" data-ajax="false">Add a resume</a></li>
                     </ul>
                 </div>
                 <div id="resumes" class="ui-body ui-content">
-                    <h1>Resumes tab</h1>
-                    <p>We'll add here resumes which the xml at server will give us.</p>
+                    <p>No resume available =(</p>
                 </div>
                 <div id="add-resume">
                     <h3 class="ui-bar ui-bar-b ui-corner-all">Resume</h3>
@@ -48,19 +47,19 @@
                             <input name="textinput-goal" id="textinput-goal" placeholder="Goal..." type="text">
                         </div>
                         <div class="ui-field-contain">
-                            <label for="textinput-cursus">Cursus:</label>
-                            <input name="textinput-cursus" id="textinput-cursus" placeholder="Cursus..." type="text">
+                            <label for="textinput-attented">Attented:</label>
+                            <input name="textinput-attented" id="textinput-attented" placeholder="Attented..." type="text">
                         </div>
                         <div class="ui-field-contain">
                             <label for="textinput-languages">Languages:</label>
-                            <input name="textinput-languages" id="textinput-languages" placeholder="Language..." type="text">
+                            <input name="textinput-languages" id="textinput-languages" placeholder="Languages..." type="text">
                         </div>
                         <div class="ui-field-contain">
-                            <label for="textinput-languages">Skills:</label>
+                            <label for="textinput-skills">Skills:</label>
                             <input name="textinput-skills" id="textinput-skills" placeholder="Skills..." type="text">
                         </div>
                         <div class="ui-field-contain">
-                            <label for="textinput-languages">IT skills:</label>
+                            <label for="textinput-itskills">IT skills:</label>
                             <input name="textinput-itskills" id="textinput-itskills" placeholder="IT Skills..." type="text">
                         </div>          
                     </form>
