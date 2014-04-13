@@ -3,6 +3,10 @@
 //
 document.addEventListener("deviceready", onDeviceReady, false);
 
+
+function showConfirm(buttonIndex) {
+    
+}
 // device APIs are available
 //
 function onDeviceReady() {
@@ -11,11 +15,17 @@ function onDeviceReady() {
 
 function checkConnection() {
     var networkState = navigator.connection.type;
-    if (Connection.NONE == networkState 
+    if (Connection.NONE === networkState 
             || Connection.UNKNOWN == navigator.connection.type) {
-         $('#networkErrorPopupLink').get(0).click();
+        
+        if (navigator.notification) { // Override default HTML alert with native dialog
+            navigator.notification
+                 .confirm("You need to be in 3G or WIFI to use this application",function(){} ,
+         "Network error", 'Ok');
+        } else {
+            $('#networkErrorPopupLink').get(0).click();
+        }
     }
-
 }
 
 function createCORSRequest(method, url) {
@@ -44,12 +54,24 @@ function createCORSRequest(method, url) {
 
  //show loader
 var showLoader = function () {   
-        $('.ui-loader').css('display', 'block');
+        var $this = $( this ),
+        theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
+        msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
+        textVisible = $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
+        textonly = !!$this.jqmData( "textonly" );
+        html = $this.jqmData( "html" ) || "";
+        $.mobile.loading( "show", {
+            text: msgText,
+            textVisible: textVisible,
+            theme: theme,
+            textonly: textonly,
+            html: html
+    });
 };
 
  //hide loader
 var hideLoader = function () {
-            $('.ui-loader').css('display', 'none');
+            $.mobile.loading("hide");
 };
 
 function xmlToString(xmlData) { 
@@ -405,9 +427,11 @@ function putResume() {
 
     var xhr = createCORSRequest('PUT', url);
     xhr.onreadystatechange = function() {
-        if (xhr.readyState==4) {
-            $('#sendPopupLink').get(0).click();
+        $('#sendPopupLink').get(0).click();
+        if (xhr.readyState==4) {        
             resetForm();
+            $('#sendPopupLink').get(0).click();
+            alert("Resume sent");
         }
     };
     xhr.setRequestHeader("Content-type", "application/xml");
@@ -469,8 +493,7 @@ $(document).ready(function() {
         $(this).prev("input").remove();
         $(this).remove();
     });
-    
-    $("input#search").keyup(function() {
+    $(document).on('input paste', '#search',function() {
         if ($("#search").val() == "") {
             getResumes();
         } else if(isNaN(parseInt($("#search").val()))) {
@@ -478,7 +501,7 @@ $(document).ready(function() {
         } else {
           getResumeById($("#search").val());
         }
-    });
-        
+    }); 
 });
+
 
