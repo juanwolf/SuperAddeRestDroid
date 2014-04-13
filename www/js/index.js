@@ -24,6 +24,16 @@ function createCORSRequest(method, url) {
   return xhr;
 }
 
+ //show loader
+var showLoader = function () {   
+        $('.ui-loader').css('display', 'block');
+   }
+
+ //hide loader
+var hideLoader = function () {
+            $('.ui-loader').css('display', 'none');
+   }
+
 function xmlToString(xmlData) { 
 
     var xmlString;
@@ -99,62 +109,84 @@ function Resume(id, name, surname, goal, attended, languages, skills, itSkills) 
             }
         resumeString += "</ITSkills>"
             + "</resume>";
-        console.log($.parseXML(resumeString));
         return $.parseXML(resumeString);
     };
     
     this.toHtml = function() {
         var template = "";
-        template += "<div id='resume-'"+ this.id + " class='resume'>"
-                +"<p class='name'>" + this.name +"</p>"
-                +"<p class='surname'>" + this.surname +"</p>"
-                +"<p class='goal'>" + this.goal +"</p>"
-                +"<ul class='attended'>";
-        if (typeof this.attended !== "undefined") {
+        template += "<div id='resume-"+ this.id + "' class='resume ui-body ui-body-a ui-corner-all'>"
+                + "<h3> Resume #" + this.id + "</h3>"
+                +"<div class='name'>"+
+                    "<span class='label'>Name: </span>"
+                   + "<span class='attribute'>" + this.name +"</span>"
+                + "</div>"
+                +"<div class='surname'>" 
+                    +"<span class='label'> Surname: </span>"
+                    +"<span class='attribute'>" +  this.surname + "</span>"
+                +"</div>"
+                +"<div class=goal>"
+                    + "<span class='label'>Goal: </span>"
+                    + "<span class='attribute'> " 
+                        + this.goal 
+                    +"</span></div>"
+                +"<div class='attented'>"
+                +"<span class='label'>Attended: </span>";              
+        if (this.attended.length !== 0) {
+            template += "<ul class='attended'>";
             for (var i = 0; i < this.attended.length; i++) {
                 template += "<li class='institution'>"
                             + this.attended[i]   
                             + "</li>";
             }
+            template += "</ul>";
         } else {
-            template += "No attended.";
+            template += "<span>None</span>";
         }
-        template += "</ul>";
-        template += "<ul class='languages'>";
-        if (typeof this.languages !== "undefined") {
+        template += "</div>";
+        template += "<div class='languages'>"
+                + "<span class='label'>Languages: </span>"
+        if (this.languages.length !== 0) {
+            template += "<ul class='languages'>";
             for (var i = 0; i < this.languages.length; i++) {
                 template += "<li class='language'>"
                             + this.languages[i]   
                             + "</li>";
             }
+            template += "</ul>";
         } else {
-            template += "No language";
+            template += "<span>None</span>";
         }
-        template += "</ul>";
-        template += "<ul class='skills'>";
-        if (typeof this.skills !== "undefined") {
+        template += "</ul></div>";
+        template += "<div class='skills'>"
+                + "<span class='label'>Skills: </span>";
+        
+        if (this.skills.length !== 0) {
+            template += "<ul class='skills'>";
             for (var i = 0; i < this.skills.length; i++) {
                 template += "<li class='skill'>"
                             + this.skills[i]   
                             + "</li>";
             }
+            template += "</ul>";
         } else {
-            template += "No skill";
+            template += "None";
         }
-        template += "</ul>";
-        template += "<ul class='it-skills'>";
-        if (typeof this.itSkills !== "undefined") {
+        template += "</ul></div>";
+        template += "<div class='it-skills'>"
+                 + "<span class='label'>IT Skills: </span>";
+        if (this.itSkills.length !== 0) {
+            template += "<ul class='it-skills'>";
             for (var i = 0; i < this.itSkills.length; i++) {
                 template += "<li class='language'>"
                             + this.itSkills[i]   
                             + "</li>";
             }
+            template += "</ul>";
         } else {
-            template += "No IT skill";
+            template += "None";
         }
-        template += "</ul>"
+        template += "</div>"
                  + "</div>";
-        console.log("Resume toHTML template =" + template);
         return template;
     };
     
@@ -164,13 +196,41 @@ function getResumeFromForm() {
     var ownId = 0,
     name = $("#textinput-name").val(),
     surname = $("#textinput-surname").val(),
-    goal = $("#textinput-goal").val(),
-    attended = $("#textinput-attended").val(),
-    languages = $("#textinput-languages").val(),
-    skills = $("#textinput-skills").val(),
-    itSkills = $("#textinput-itskills").val();
+    goal = $("#textinput-goal").val();
+    
+    
+    var attended = [];
+    $divs = $('label[for="textinput-attended"]').nextAll("div");
+    $inputs = $divs.children("input");
+    $inputsTab = $inputs.toArray();
+    for (var i = 0; i < $inputsTab.length; i++) {
+        attended.push($inputsTab[i].value);
+    }
+    var languages = [];
+    $divs = $('label[for="textinput-languages"]').nextAll("div");
+    $inputs = $divs.children("input");
+    $inputsTab = $inputs.toArray();
+    for (var i = 0; i < $inputsTab.length; i++) {
+        languages.push($inputsTab[i].value);
+    }
+    
+    var skills = [];
+    $divs = $('label[for="textinput-skills"]').nextAll("div");
+    $inputs = $divs.children("input");
+    $inputsTab = $inputs.toArray();
+    for (var i = 0; i < $inputsTab.length; i++) {
+        skills.push($inputsTab[i].value);
+    }
+    var itSkills = [];
+    $divs = $('label[for="textinput-itskills"]').nextAll("div");
+    $inputs = $divs.children("input");
+    $inputsTab = $inputs.toArray();
+    for (var i = 0; i < $inputsTab.length; i++) {
+        itSkills.push($inputsTab[i].value);
+    }
+    
     var res = new Resume(ownId, name, surname, goal, attended, languages, skills,
-        skills, itSkills);
+        itSkills);
     return res;
 }
 
@@ -182,25 +242,25 @@ function parseXMLtoHTML(XMLFile) {
         var surname = $(this).find("surname").text(); 
         var goal = $(this).find("goal").text();
         var i = 0;
-        var attended;
+        attended = [];
         $(this).find("institution").each(function() {
             attended[i] = $(this).text();
             i++;
         });
         i = 0;
-        var languages;
-        $(this).find("language").each(function($languages) {
+        languages = [];
+        $(this).find("language").each(function() {
             languages[i] = $(this).text();
             i++;
         });
         i = 0;
-        var skills; 
+        skills = []; 
         $(this).find("skill").each(function() {
             skills[i] = $(this).text();
             i++;
         });
         i = 0;
-        var itSkills;
+        itSkills = [];
         $(this).find("ITSkill").each(function() {
             itSkills[i] = $(this).text();
             i++;
@@ -215,15 +275,16 @@ function parseXMLtoHTML(XMLFile) {
 function getResumes() {
     // All HTML5 Rocks properties support CORS.
     var resumes = "";
-    var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net/?callback=?';
+    var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net';
 
+    showLoader();
     jQuery.ajax({
+       
         type: "GET",
         url: url,
         contentType: "text/xml; charset=utf-8",
         success: function (data, status, jqXHR) {
-            console.log("[GET RESUMES] Element data=" + data + " status=" + status
-                    + " jqXHR=" + jqXHR);
+            hideLoader();
             resumes = xmlToString(data);
             var res = parseXMLtoHTML(resumes);
             if (res !== "") {
@@ -239,8 +300,7 @@ function getResumes() {
 
 function getResumeById(id) {
     var resume;
-    var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net/'+ id 
-            + '?callback=?';
+    var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net/'+ id;
 
     var xhr = createCORSRequest('GET', url);
     xhr.onreadystatechange = function() {
@@ -271,12 +331,12 @@ function putResume() {
     var resume = getResumeFromForm();
     var xml = resume.toXml();
     
-    var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net/?callback=?';
+    var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net';
 
     var xhr = createCORSRequest('PUT', url);
     xhr.onreadystatechange = function() {
         if (xhr.readyState==4) {
-            // Sending stuff..
+            
         }
     };
     xhr.setRequestHeader("Content-type", "application/xml");
@@ -287,7 +347,7 @@ function putResume() {
     }
     // Response handlers.
     xhr.onload = function() {
-      alert("Resume send");
+        
     };
 
     xhr.onerror = function() {
@@ -296,6 +356,23 @@ function putResume() {
     xhr.send(xml);
 }
 
+function resetForm() {
+    $("input").each(function() {
+        $(this).val("");
+    });
+}
+
+function addInputBefore($element) {
+    $name = $element.prevAll("label").attr("name");
+    $element.before("<div class='ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset'>"
+            +"<input type='text'></input> "
+            + "<a href='#' class='remove-input-btn ui-btn ui-corner-all ui-icon-delete ui-btn-icon-right'>"
+            + "Delete this field</a></div>");
+    $(".remove-input-btn").unbind("click");
+    $(".remove-input-btn").click(function() {
+        $(this).parent("div").remove();
+    });
+}
 
 $(document).ready(function() {
     getResumes();
@@ -306,6 +383,20 @@ $(document).ready(function() {
     
     $("#add-button").click(function() {
         putResume();
+    });
+    
+    $("#reset-button").click(function() {
+        resetForm() ;
+    });
+    
+    $(".add-input").click(function() {
+        addInputBefore($(this));
+    });
+    
+    $(".remove-input-btn").click(function() {
+        console.log("Supression de : " + $(this).prev("input").value );
+        $(this).prev("input").remove();
+        $(this).remove();
     });
 });
 
