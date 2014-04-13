@@ -14,18 +14,18 @@ function onDeviceReady() {
 }
 
 function checkConnection() {
-    var networkState = navigator.connection.type;
+   /* var networkState = navigator.connection.type;
     if (Connection.NONE === networkState 
-            || Connection.UNKNOWN == navigator.connection.type) {
+            || Connection.UNKNOWN === navigator.connection.type) {
         
         if (navigator.notification) { // Override default HTML alert with native dialog
             navigator.notification
-                 .confirm("You need to be in 3G or WIFI to use this application",function(){} ,
+                 .confirm("You need to be in 3G or WIFI to use this application",null ,
          "Network error", 'Ok');
         } else {
             $('#networkErrorPopupLink').get(0).click();
         }
-    }
+    }*/
 }
 
 function createCORSRequest(method, url) {
@@ -427,11 +427,23 @@ function putResume() {
 
     var xhr = createCORSRequest('PUT', url);
     xhr.onreadystatechange = function() {
-        $('#sendPopupLink').get(0).click();
-        if (xhr.readyState==4) {        
+        if (navigator.notification) { // Override default HTML alert with native dialog
+            window.alert = function (message) {
+                navigator.notification.alert(
+                    "Resume Sent",    // message
+                    null,       // callback
+                    "Succesfull", // title
+                    'OK'        // buttonName
+                );
+            };
+        }
+        if (xhr.readyState == 4) {  
+            if (!navigator.notification) { // Override default HTML alert with native dialog    
+                $('#sendPopupLink').get(0).click();
+            }
             resetForm();
-            $('#sendPopupLink').get(0).click();
-            alert("Resume sent");
+            //$('#sendPopupLink').get(0).click();
+            
         }
     };
     xhr.setRequestHeader("Content-type", "application/xml");
