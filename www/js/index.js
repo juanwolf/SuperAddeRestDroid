@@ -24,6 +24,20 @@ function createCORSRequest(method, url) {
   return xhr;
 }
 
+function xmlToString(xmlData) { 
+
+    var xmlString;
+    //IE
+    if (window.ActiveXObject){
+        xmlString = xmlData.xml;
+    }
+    // code for Mozilla, Firefox, Opera, etc.
+    else{
+        xmlString = (new XMLSerializer()).serializeToString(xmlData);
+    }
+    return xmlString;
+} 
+
 
 /**
  *  Constructor for the resume object
@@ -40,7 +54,7 @@ function createCORSRequest(method, url) {
 
 
 function Resume(id, name, surname, goal, attended, languages, skills, itSkills) {                  
-    this.ownId = id;
+    this.id = id;
     this.name = name;
     this.surname = surname;
     this.goal = goal;
@@ -52,21 +66,94 @@ function Resume(id, name, surname, goal, attended, languages, skills, itSkills) 
         var resumeString = 
             "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
             +"<resume>"
-            +    "<ownId>" + this.ownId + "</ownId>"
+            +    "<id>" + this.ownId + "</id>"
             +    "<name>" + this.name + "</name>"
             +    "<surname>" + this.surname + "</surname>"
             +    "<goal>" + this.goal + "</goal>"
-            +    "<attended>" + this.attended + "</attended>"
-            +    "<languages>" + this.languages + "</languages>"
-            +    "<skills>" + this.skills + "</skills>"
-            +    "<itSkills>" + this.itSkills + "</itSkills>"
+            +    "<attended>";
+            for ($i = 0; $i < this.attended.length; $i++) {
+                resumeString += "<institution>" 
+                        + this.attended[$i] 
+                            + "</institution>";
+            }
+        resumeString +="</attended>"
+            +    "<languages>";
+            for ($i = 0; $i < this.languages.length; $i++) {
+                resumeString += "<language>" 
+                        + this.languages[$i] 
+                            + "</language>";
+            }
+        resumeString += "</languages>"
+            + "<skills>";
+            for ($i = 0; $i < this.skills.length; $i++) {
+                resumeString += "<skill>" 
+                        + this.skills[$i] 
+                            + "</skill>";
+            }
+        resumeString += "</skills>"
+            +    "<ITSkills>";
+            for ($i = 0; $i < this.itSkills.length; $i++) {
+                resumeString += "<ITSkill>" 
+                        + this.itSkills[$i] 
+                            + "</ITSkill>";
+            }
+        resumeString += "</ITSkills>"
             + "</resume>";
         console.log($.parseXML(resumeString));
         return $.parseXML(resumeString);
     };
+    
     this.toHtml = function() {
         var template = "";
-        template += "<div><p>"+ this.name +"</p></div>";
+        template += "<div id='resume-'"+ this.id + " class='resume'>"
+                +"<p class='name'>" + this.name +"</p>"
+                +"<p class='surname'>" + this.surname +"</p>"
+                +"<p class='goal'>" + this.goal +"</p>"
+                +"<ul class='attended'>";
+        if (typeof this.attended !== "undefined") {
+            for (var i = 0; i < this.attended.length; i++) {
+                template += "<li class='institution'>"
+                            + this.attended[i]   
+                            + "</li>";
+            }
+        } else {
+            template += "No attended.";
+        }
+        template += "</ul>";
+        template += "<ul class='languages'>";
+        if (typeof this.languages !== "undefined") {
+            for (var i = 0; i < this.languages.length; i++) {
+                template += "<li class='language'>"
+                            + this.languages[i]   
+                            + "</li>";
+            }
+        } else {
+            template += "No language";
+        }
+        template += "</ul>";
+        template += "<ul class='skills'>";
+        if (typeof this.skills !== "undefined") {
+            for (var i = 0; i < this.skills.length; i++) {
+                template += "<li class='skill'>"
+                            + this.skills[i]   
+                            + "</li>";
+            }
+        } else {
+            template += "No skill";
+        }
+        template += "</ul>";
+        template += "<ul class='it-skills'>";
+        if (typeof this.itSkills !== "undefined") {
+            for (var i = 0; i < this.itSkills.length; i++) {
+                template += "<li class='language'>"
+                            + this.itSkills[i]   
+                            + "</li>";
+            }
+        } else {
+            template += "No IT skill";
+        }
+        template += "</ul>"
+                 + "</div>";
         console.log("Resume toHTML template =" + template);
         return template;
     };
@@ -90,16 +177,36 @@ function getResumeFromForm() {
 function parseXMLtoHTML(XMLFile) {
     var res = "";
     $(XMLFile).find("resume").each(function() { 
-        ownId = $(this).find("ownId").text(); 
-        name = $(this).find("name").text(); 
-        surname = $(this).find("surname").text(); 
-        goal = $(this).find("goal").text(); 
-        attended = $(this).find("attended").text(); 
-        languages = $(this).find("languages").text(); 
-        skills = $(this).find("skills").text(); 
-        itSkills = $(this).find("itSkills").text();
-        var resume = new Resume(ownId, name, surname, goal, attended, languages,
-            skills, itSkills);
+        var id = $(this).find("id").text(); 
+        var name = $(this).find("name").text(); 
+        var surname = $(this).find("surname").text(); 
+        var goal = $(this).find("goal").text();
+        var i = 0;
+        var attended;
+        $(this).find("institution").each(function() {
+            attended[i] = $(this).text();
+            i++;
+        });
+        i = 0;
+        var languages;
+        $(this).find("language").each(function($languages) {
+            languages[i] = $(this).text();
+            i++;
+        });
+        i = 0;
+        var skills; 
+        $(this).find("skill").each(function() {
+            skills[i] = $(this).text();
+            i++;
+        });
+        i = 0;
+        var itSkills;
+        $(this).find("ITSkill").each(function() {
+            itSkills[i] = $(this).text();
+            i++;
+        });
+        var resume = new Resume(id, name, surname, goal, attended,
+        languages, skills, itSkills);
         res += resume.toHtml();
     }); 
     return res; 
@@ -107,36 +214,28 @@ function parseXMLtoHTML(XMLFile) {
 
 function getResumes() {
     // All HTML5 Rocks properties support CORS.
-    var resumes;
+    var resumes = "";
     var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net/?callback=?';
 
-    var xhr = createCORSRequest('GET', url);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            // Do something
+    jQuery.ajax({
+        type: "GET",
+        url: url,
+        contentType: "text/xml; charset=utf-8",
+        success: function (data, status, jqXHR) {
+            console.log("[GET RESUMES] Element data=" + data + " status=" + status
+                    + " jqXHR=" + jqXHR);
+            resumes = xmlToString(data);
+            var res = parseXMLtoHTML(resumes);
+            if (res !== "") {
+                $("#resumes").html(res);
+            }
+        },
+
+        error: function (jqXHR, status) {
+            // error handler
         }
-    };
-    xhr.setRequestHeader("Content-type", "text/xml");
-    xhr.setRequestHeader("Connection", "close");
-    if (!xhr) {
-      alert('CORS not supported');
-      return;
-    }
-
-    // Response handlers.
-    xhr.onload = function() {
-      var resumes = xhr.responseXML;
-      alert('Response from CORS request to ' + url + ': ' + resumes);
-    };
-
-    xhr.onerror = function() {
-      $('#errorPopupLink').get(0).click();
-    };
-
-    xhr.send();
-    return resumes;
+    });
 }
-
 
 function getResumeById(id) {
     var resume;
@@ -199,10 +298,11 @@ function putResume() {
 
 
 $(document).ready(function() {
-    var xmlResumes = getResumes();
-    var htmlResumes = parseXMLtoHTML(xmlResumes);
-    $("#resumes").append(htmlResumes);
+    getResumes();
     
+    $("#refresh-button").click(function() {
+        getResumes();
+    });
     
     $("#add-button").click(function() {
         putResume();
