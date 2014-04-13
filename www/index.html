@@ -22,23 +22,48 @@
                 </a>
                 <p>An error occured !</p>
             </div>
+            <a id="sendPopupLink" href="#sendPopup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="popup" data-position-to="window"></a>
+            <div data-role="popup" id="sendPopup" data-overlay-theme="a" class="ui-content" data-theme="a">
+                <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">
+                    Close
+                </a>
+                <p>Your resume is sent !</p>
+            </div>
+            <a id="networkErrorPopupLink" href="#networkErrorPopup" class="ui-btn ui-corner-all ui-shadow ui-btn-inline" data-rel="popup" data-position-to="window"></a>
+            <div data-role="popup" id="networkErrorPopup" data-overlay-theme="a" class="ui-content" data-theme="a">
+                <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-left">
+                    Close
+                </a>
+                <p>Please check your network, and try again.</p>
+            </div>
             <div class="outlying" data-role="header" data-theme="b">
                 <h1>Resume Manager</h1>
                 <a id="refresh-button" href="#" class="ui-shadow-icon ui-btn ui-shadow ui-corner-all ui-btn-b ui-icon-refresh ui-btn-icon-left ui-btn-icon-notext"></a>
             </div>
-
+            
             <div data-role="main" class="ui-content">
                 <div data-role="tabs" id="tabs">
                     <div data-role="navbar">
                         <ul>
                             <li><a class="ui-btn-active" href="#resumes" data-ajax="true">Resumes</a></li>
+                            
                             <li><a href="#add-resume" data-ajax="false">Add a resume</a></li>
                         </ul>
                     </div>
                     <div id="resumes" class="ui-body ui-content">
-                        <p>No resume available =(</p>
+                        <div class="ui-field-contain">
+                            <input id="search" placeholder="Search resume by id" type="number">
+
+                            <div id="search-result">
+                                <p>No resume available =(</p>
+                            </div>
+                        </div>
+                        
                     </div>
+                    
+                    
                     <div id="add-resume">
+
                         <h3 class="ui-bar ui-bar-b ui-corner-all">Resume</h3>
                         <form>
                             <div class="ui-field-contain">

@@ -1,4 +1,22 @@
 // JS For the index page. 
+// Wait for device API libraries to load
+//
+document.addEventListener("deviceready", onDeviceReady, false);
+
+// device APIs are available
+//
+function onDeviceReady() {
+    checkConnection();
+}
+
+function checkConnection() {
+    var networkState = navigator.connection.type;
+    if (Connection.NONE == networkState 
+            || Connection.UNKNOWN == navigator.connection.type) {
+         $('#networkErrorPopupLink').get(0).click();
+    }
+
+}
 
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -27,12 +45,12 @@ function createCORSRequest(method, url) {
  //show loader
 var showLoader = function () {   
         $('.ui-loader').css('display', 'block');
-   }
+};
 
  //hide loader
 var hideLoader = function () {
             $('.ui-loader').css('display', 'none');
-   }
+};
 
 function xmlToString(xmlData) { 
 
@@ -204,14 +222,18 @@ function getResumeFromForm() {
     $inputs = $divs.children("input");
     $inputsTab = $inputs.toArray();
     for (var i = 0; i < $inputsTab.length; i++) {
-        attended.push($inputsTab[i].value);
+        if ($inputsTab[i].value !== "") {
+            attended.push($inputsTab[i].value);
+        }
     }
     var languages = [];
     $divs = $('label[for="textinput-languages"]').nextAll("div");
     $inputs = $divs.children("input");
     $inputsTab = $inputs.toArray();
     for (var i = 0; i < $inputsTab.length; i++) {
-        languages.push($inputsTab[i].value);
+        if ($inputsTab[i].value !== "") {
+            languages.push($inputsTab[i].value);
+        }
     }
     
     var skills = [];
@@ -219,14 +241,18 @@ function getResumeFromForm() {
     $inputs = $divs.children("input");
     $inputsTab = $inputs.toArray();
     for (var i = 0; i < $inputsTab.length; i++) {
-        skills.push($inputsTab[i].value);
+        if ($inputsTab[i].value !== "") {
+            skills.push($inputsTab[i].value);
+        }
     }
     var itSkills = [];
     $divs = $('label[for="textinput-itskills"]').nextAll("div");
     $inputs = $divs.children("input");
     $inputsTab = $inputs.toArray();
     for (var i = 0; i < $inputsTab.length; i++) {
-        itSkills.push($inputsTab[i].value);
+        if ($inputsTab[i].value !== "") {
+            itSkills.push($inputsTab[i].value);
+        }
     }
     
     var res = new Resume(ownId, name, surname, goal, attended, languages, skills,
@@ -268,7 +294,41 @@ function parseXMLtoHTML(XMLFile) {
         var resume = new Resume(id, name, surname, goal, attended,
         languages, skills, itSkills);
         res += resume.toHtml();
-    }); 
+    });
+    if(res === "") {
+        var id = $(XMLFile).find("id").text(); 
+        var name = $(XMLFile).find("name").text(); 
+        var surname = $(XMLFile).find("surname").text(); 
+        var goal = $(XMLFile).find("goal").text();
+        var i = 0;
+        attended = [];
+        $(XMLFile).find("institution").each(function() {
+            attended[i] = $(this).text();
+            i++;
+        });
+        i = 0;
+        languages = [];
+        $(XMLFile).find("language").each(function() {
+            languages[i] = $(this).text();
+            i++;
+        });
+        i = 0;
+        skills = []; 
+        $(XMLFile).find("skill").each(function() {
+            skills[i] = $(this).text();
+            i++;
+        });
+        i = 0;
+        itSkills = [];
+        $(XMLFile).find("ITSkill").each(function() {
+            itSkills[i] = $(this).text();
+            i++;
+        });
+        var resume = new Resume(id, name, surname, goal, attended,
+        languages, skills, itSkills);
+        res += resume.toHtml();
+        
+    }
     return res; 
 }
 
@@ -288,7 +348,7 @@ function getResumes() {
             resumes = xmlToString(data);
             var res = parseXMLtoHTML(resumes);
             if (res !== "") {
-                $("#resumes").html(res);
+                $("#search-result").html(res);
             }
         },
 
@@ -305,7 +365,7 @@ function getResumeById(id) {
     var xhr = createCORSRequest('GET', url);
     xhr.onreadystatechange = function() {
         if (xhr.readyState==4) {
-            //alert("It worked!");
+            
         }
     };
     xhr.setRequestHeader("Content-type", "text/xml");
@@ -316,7 +376,17 @@ function getResumeById(id) {
     }
     // Response handlers.
     xhr.onload = function() {
-      var resumes = xhr.responseXML;
+        resumes = xmlToString(xhr.responseXML);
+        if (resumes.search("Parsing Error:") === -1) {
+            var res = parseXMLtoHTML(resumes);
+            console.log(res);
+            if (res !== "") {
+                $("#search-result").html(res);
+            }
+        } else {
+            $("#search-result").html("<p>No resume with the id: "
+                    + $("#search").val() + "</p>");
+        }
     };
 
     xhr.onerror = function() {
@@ -336,7 +406,8 @@ function putResume() {
     var xhr = createCORSRequest('PUT', url);
     xhr.onreadystatechange = function() {
         if (xhr.readyState==4) {
-            
+            $('#sendPopupLink').get(0).click();
+            resetForm();
         }
     };
     xhr.setRequestHeader("Content-type", "application/xml");
@@ -398,5 +469,16 @@ $(document).ready(function() {
         $(this).prev("input").remove();
         $(this).remove();
     });
+    
+    $("input#search").keyup(function() {
+        if ($("#search").val() == "") {
+            getResumes();
+        } else if(isNaN(parseInt($("#search").val()))) {
+            $("#search-result").html ="<p>The id must be an number</p>";
+        } else {
+          getResumeById($("#search").val());
+        }
+    });
+        
 });
 
