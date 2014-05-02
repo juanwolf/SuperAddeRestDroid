@@ -441,9 +441,10 @@ function resetForm() {
 function addInputBefore($element) {
     $name = $element.prevAll("label").attr("name");
     $element.before("<div class='ui-input-text ui-body-inherit ui-corner-all ui-shadow-inset'>"
-            +"<input type='text'></input> "
-            + "<a href='#' class='remove-input-btn ui-btn ui-corner-all ui-icon-delete ui-btn-icon-right'>"
-            + "Delete this field</a></div>");
+            +"<input class='input-list' data-clear-btn='true' type='text'></input>"
+            + "<a href='#' class='remove-input-btn ui-btn ui-btn-icon ui-btn-icon-notext ui-corner-all ui-icon-delete'>"
+            + "Delete this field</a>"
+        +"</div>");
     $(".remove-input-btn").unbind("click");
     $(".remove-input-btn").click(function() {
         $(this).parent("div").remove();

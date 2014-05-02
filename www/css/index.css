@@ -55,6 +55,16 @@ ul {
     border: #ddd;
 }
 
+input.input-list {
+    display: inline-block;
+    width: 90%;
+}
+
+a.remove-input-btn {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .ui-icon-loading {
     background: url(http://code.jquery.com/mobile/1.1.0-rc.1/images/ajax-loader.png);
     background-size: 46px 46px;
