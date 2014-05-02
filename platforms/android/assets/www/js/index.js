@@ -1,31 +1,9 @@
 // JS For the index page. 
-// Wait for device API libraries to load
-//
-document.addEventListener("deviceready", onDeviceReady, false);
-
-
-function showConfirm(buttonIndex) {
-    
-}
-// device APIs are available
-//
-function onDeviceReady() {
-    checkConnection();
-}
-
-function checkConnection() {
-   /* var networkState = navigator.connection.type;
-    if (Connection.NONE === networkState 
-            || Connection.UNKNOWN === navigator.connection.type) {
-        
-        if (navigator.notification) { // Override default HTML alert with native dialog
-            navigator.notification
-                 .confirm("You need to be in 3G or WIFI to use this application",null ,
-         "Network error", 'Ok');
-        } else {
-            $('#networkErrorPopupLink').get(0).click();
-        }
-    }*/
+function showNotification() {
+    $("#notification-resume-sent").fadeIn();
+    $("#notification-resume-sent").css("display", "block");
+    $("#notification-resume-sent").delay(5000).fadeOut();
+            
 }
 
 function createCORSRequest(method, url) {
@@ -54,24 +32,25 @@ function createCORSRequest(method, url) {
 
  //show loader
 var showLoader = function () {   
-        var $this = $( this ),
-        theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
-        msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
-        textVisible = $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
-        textonly = !!$this.jqmData( "textonly" );
-        html = $this.jqmData( "html" ) || "";
-        $.mobile.loading( "show", {
-            text: msgText,
-            textVisible: textVisible,
-            theme: theme,
-            textonly: textonly,
-            html: html
+    var $this = $( this ),
+    theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
+    msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
+    textVisible = $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
+    textonly = !!$this.jqmData( "textonly" );
+    html = $this.jqmData( "html" ) || "";
+    $.mobile.loading( "show", {
+        text: msgText,
+        textVisible: textVisible,
+        theme: theme,
+        textonly: textonly,
+        html: html
     });
+    $.mobile.loading("show");
 };
 
  //hide loader
 var hideLoader = function () {
-            $.mobile.loading("hide");
+    $.mobile.loading("hide");
 };
 
 function xmlToString(xmlData) { 
@@ -418,7 +397,10 @@ function getResumeById(id) {
     xhr.send();
     return resume; 
 }
-
+/**
+ * Send a resume with PUT rest method.
+ * @returns {void}
+ */
 function putResume() {
     var resume = getResumeFromForm();
     var xml = resume.toXml();
@@ -426,24 +408,11 @@ function putResume() {
     var url = 'http://resumemanagerrestserver.juanwolf.cloudbees.net';
 
     var xhr = createCORSRequest('PUT', url);
-    xhr.onreadystatechange = function() {
-        if (navigator.notification) { // Override default HTML alert with native dialog
-            window.alert = function (message) {
-                navigator.notification.alert(
-                    "Resume Sent",    // message
-                    null,       // callback
-                    "Succesfull", // title
-                    'OK'        // buttonName
-                );
-            };
-        }
-        if (xhr.readyState == 4) {  
-            if (!navigator.notification) { // Override default HTML alert with native dialog    
-                $('#sendPopupLink').get(0).click();
-            }
+    xhr.onreadystatechange = function() {   
+        showLoader()
+        if (xhr.readyState === 4) {  
+            showNotification();
             resetForm();
-            //$('#sendPopupLink').get(0).click();
-            
         }
     };
     xhr.setRequestHeader("Content-type", "application/xml");
@@ -454,11 +423,11 @@ function putResume() {
     }
     // Response handlers.
     xhr.onload = function() {
-        
+        hideLoader();
     };
 
     xhr.onerror = function() {
-      $('#errorPopupLink').get(0).click();
+      // $('#errorPopupLink').get(0).click();
     };
     xhr.send(xml);
 }
@@ -506,7 +475,7 @@ $(document).ready(function() {
         $(this).remove();
     });
     $(document).on('input paste', '#search',function() {
-        if ($("#search").val() == "") {
+        if ($("#search").val() === "") {
             getResumes();
         } else if(isNaN(parseInt($("#search").val()))) {
             $("#search-result").html ="<p>The id must be an number</p>";
